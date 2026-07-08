@@ -14,13 +14,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install, build, and upload
-        uses: withastro/action@v3
+      - uses: actions/setup-node@v4
         with:
-          package-manager: npm
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: chmod +x node_modules/.bin/astro
+
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
   deploy:
     needs: build
@@ -29,6 +38,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - uses: actions/deploy-pages@v4
         id: deployment
-        uses: actions/deploy-pages@v4
