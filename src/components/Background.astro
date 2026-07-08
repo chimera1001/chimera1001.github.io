@@ -15,14 +15,19 @@ import Stars from "./Stars.astro";
 </script>
 
 <style>
+/* absolute (na fixed): faghat balaye safhe hast va ba scroll miravad bala,
+   pas ruye matn-haye paeen-e safhe nemiyayad */
 #space-bg {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 50% 35%, rgba(59,130,246,0.16), transparent 35%),
-    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.14), transparent 35%),
-    #05070d;
+    radial-gradient(circle at 50% 25%, rgba(59,130,246,0.16), transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.10), transparent 35%);
 }
 </style>

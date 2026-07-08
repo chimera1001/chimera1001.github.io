@@ -65,10 +65,10 @@ export function initSpaceBackground(container: HTMLElement) {
     mx += (tmx - mx) * 0.04;
     my += (tmy - my) * 0.04;
 
-    // shape sits above where the hero text starts
-    const cx = W / 2 + mx * 20;
-    const cy = Math.min(H * 0.32, 320) + my * 14;
-    const R = Math.min(W, H) * 0.22 + Math.sin(time * 0.8) * 6;
+    // shape sits at the very top, well above where the hero text starts
+    const cx = W / 2 + mx * 16;
+    const cy = 215 + my * 10;
+    const R = Math.min(Math.min(W, H) * 0.13, 145) + Math.sin(time * 0.8) * 4;
 
     const ry = reduced ? 0.6 : time * 0.25 + mx * 0.4;
     const rx = reduced ? 0.4 : Math.sin(time * 0.18) * 0.5 + my * 0.3;

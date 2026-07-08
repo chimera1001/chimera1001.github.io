@@ -10,6 +10,7 @@ const experience = [
   {
     role: "Assistant Professor, Statistics (LTA)",
     org: "University of Toronto, Ontario, Canada",
+    orgLink: "https://www.utm.utoronto.ca/",
     period: "2021 &ndash; 2026",
     points: [
       "Department of Mathematical and Computational Sciences, University of Toronto Mississauga.",
@@ -18,6 +19,7 @@ const experience = [
   {
     role: "Lead Machine Learning Scientist",
     org: "York University, Ontario, Canada",
+    orgLink: "https://www.yorku.ca/",
     period: "2022 &ndash; 2024",
     points: [
       "Research topic: \u201CMachine Learning Solutions for Infant Pain Assessment: Identification of Neuropsychological Biomarkers of Pain via Analysis of Concurrent EEG-ECG Signals.\u201D",
@@ -27,6 +29,7 @@ const experience = [
   {
     role: "Research Associate",
     org: "York University, Ontario, Canada",
+    orgLink: "https://www.yorku.ca/",
     period: "2020 &ndash; 2022",
     points: [
       "Research topic: \u201CMixed-integer Nonlinear Programming (MINLP) Models for Exact and Interpretable Formulation of Neural Networks.\u201D",
@@ -39,18 +42,21 @@ const education = [
   {
     degree: "Ph.D. in Mathematics and Statistics",
     school: "York University, Ontario, Canada (2015 &ndash; 2020)",
+    schoolLink: "https://www.yorku.ca/",
     note: "Dissertation: \u201CPortfolio Optimization Using Financial Chaos Index and Time-homogeneous Top-K Ranking Algorithm.\u201D Nominated unanimously for the best dissertation prize, recognized for its significant contributions to financial mathematics and tensor analysis.",
     link: "http://hdl.handle.net/10315/37949",
   },
   {
     degree: "M.Sc. in Applied and Industrial Mathematics",
     school: "York University, Ontario, Canada (2013 &ndash; 2015)",
+    schoolLink: "https://www.yorku.ca/",
     note: "Thesis: \u201CA Branch-and-Price Algorithm for Bin Packing Problem.\u201D",
     link: "http://hdl.handle.net/10315/30728",
   },
   {
     degree: "B.Sc. in Industrial Engineering",
     school: "Sharif University of Technology, Tehran, Iran (2008 &ndash; 2013)",
+    schoolLink: "https://en.sharif.edu/",
     note: "Thesis: \u201CSpatial Statistics and Kriging Meta-modelling for Simulation Optimization.\u201D",
     link: "",
   },
@@ -380,7 +386,7 @@ const updates = [
         </p>
 
         <p>
-          I am the inventor of several novel methods, including <a href="https://www.mdpi.com/1099-4300/28/2/157" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Lehmer Neural Networks</a>, the <a href="https://rdcu.be/cNsFa" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Lehmer Transform</a> for non-stationary signal representation, and <a href="https://doi.org/10.3390/e26110996" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Derangetropy</a> for modeling information dynamics. Previously, I served as the lead machine learning scientist on a <a href="https://www.yorku.ca/research/category/news/2019/05/researchers-win-1-89m-grant-to-search-for-ai-solution-to-infant-pain-assessment/" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">$1.89M multi-institutional research program</a> on AI solutions for infant pain assessment.
+          I am the inventor of several novel methods, including <a href="https://www.mdpi.com/1099-4300/28/2/157" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Lehmer Neural Networks</a>, the <a href="https://rdcu.be/cNsFa" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Lehmer Transform</a> for non-stationary signal representation, <a href="https://doi.org/10.3390/e26110996" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Derangetropy</a> for modeling information dynamics, and the <a href="https://www.sciencedirect.com/science/article/pii/S0378437121004337" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Financial Chaos Index</a> for quantifying turbulence in financial markets. Previously, I served as the lead machine learning scientist on a <a href="https://www.yorku.ca/research/category/news/2019/05/researchers-win-1-89m-grant-to-search-for-ai-solution-to-infant-pain-assessment/" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">$1.89M multi-institutional research program</a> on AI solutions for infant pain assessment.
         </p>
 
         <p>
@@ -448,7 +454,13 @@ const updates = [
             <h3 class="text-2xl font-semibold" set:html={e.role} />
             <span class="text-sm text-gray-500" set:html={e.period} />
           </div>
-          <p class="mt-1 text-blue-300">{e.org}</p>
+          <p class="mt-1">
+            {e.orgLink ? (
+              <a href={e.orgLink} target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">{e.org}</a>
+            ) : (
+              <span class="text-blue-300">{e.org}</span>
+            )}
+          </p>
           {e.points.length > 0 && (
             <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-400">
               {e.points.map((pt) => (<li>{pt}</li>))}
@@ -465,7 +477,13 @@ const updates = [
       {education.map((e) => (
         <div class="rounded-3xl border border-white/10 bg-white/5 p-7">
           <h3 class="text-2xl font-semibold">{e.degree}</h3>
-          <p class="mt-1 text-blue-300" set:html={e.school} />
+          <p class="mt-1">
+            {e.schoolLink ? (
+              <a href={e.schoolLink} target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline" set:html={e.school} />
+            ) : (
+              <span class="text-blue-300" set:html={e.school} />
+            )}
+          </p>
           {e.note && <p class="mt-2 text-gray-400 italic">{e.note}</p>}
           {e.link && (
             <a href={e.link} target="_blank" class="mt-3 inline-flex items-center gap-2 text-sm font-medium text-blue-300 hover:text-blue-100">
