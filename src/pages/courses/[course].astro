@@ -1,0 +1,152 @@
+---
+// Course Materials page.
+// HOW IT WORKS: har pushei ke dakhel public/courses/ bezari (masalan STA457)
+// khodesh ye safhe misheh: /courses/sta457
+// Dakhel har course in 3 ta pushe hast:
+//   Lecture_Notes/   Homeworks/   Past_Exams/
+// Har file-i (PDF, zip, ...) ke toosh bezari, moghe-e build khodkar list
+// misheh va link-e download migire. Faghat file-ha ro bezar va push kon.
+import "../../styles/global.css";
+import fs from "node:fs";
+import path from "node:path";
+import Background from "../../components/Background.astro";
+import Mascot from "../../components/Mascot.astro";
+
+export async function getStaticPaths() {
+  const coursesDir = path.resolve("./public/courses");
+  if (!fs.existsSync(coursesDir)) return [];
+  return fs
+    .readdirSync(coursesDir)
+    .filter((d) => fs.statSync(path.join(coursesDir, d)).isDirectory())
+    .map((course) => ({ params: { course: course.toLowerCase() }, props: { course } }));
+}
+
+const { course } = Astro.props;
+
+// Course titles (from CV) — courses not listed here just show their code.
+const courseTitles: Record<string, string> = {
+  STA457: "Applied Time Series Analysis",
+  STA260: "Mathematical Statistics",
+  STA256: "Probability Theory",
+  STA107: "Introduction to Probability and Modelling",
+  STA258: "Statistics with Applied Probability",
+  STA314: "Introduction to Statistical Learning",
+  STA215: "Introduction to Applied Statistics",
+  CSCC11: "Introduction to Machine Learning",
+  MAT102: "Introduction to Mathematical Proofs",
+  MAT344: "Introduction to Combinatorics",
+  MAT135: "Differential Calculus",
+};
+
+const title = courseTitles[course] ?? "";
+const courseDir = path.resolve("./public/courses", course);
+
+const sectionDefs = [
+  {
+    dir: "Lecture_Notes",
+    label: "Lecture Notes",
+    color: "from-blue-400 to-cyan-400",
+    icon: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z",
+  },
+  {
+    dir: "Homeworks",
+    label: "Homeworks",
+    color: "from-emerald-400 to-teal-400",
+    icon: "M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z",
+  },
+  {
+    dir: "Past_Exams",
+    label: "Past Exams",
+    color: "from-amber-400 to-orange-400",
+    icon: "M9 11l3 3L22 4 M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11",
+  },
+];
+
+function listFiles(dirName: string) {
+  const dir = path.join(courseDir, dirName);
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => !f.startsWith(".") && fs.statSync(path.join(dir, f)).isFile())
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+    .map((f) => ({
+      name: f.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " "),
+      ext: (f.split(".").pop() ?? "").toUpperCase(),
+      href: `/courses/${course}/${dirName}/${encodeURIComponent(f)}`,
+    }));
+}
+
+const sections = sectionDefs.map((s) => ({ ...s, files: listFiles(s.dir) }));
+---
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{course}{title ? ` — ${title}` : ""} · Masoud Ataei</title>
+</head>
+<body>
+<main class="relative min-h-screen bg-[#05070d] text-white">
+
+  <Background />
+
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#05070d]/70 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <a href="/" class="text-lg font-semibold tracking-wide">Masoud Ataei</a>
+      <div class="flex gap-6 text-sm text-gray-300">
+        <a href="/#teaching" class="hover:text-white">&larr; Back to Teaching</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="relative z-10 mx-auto max-w-7xl px-6 pt-40 pb-12">
+    <p class="mb-4 text-sm uppercase tracking-[0.35em] text-blue-300">Course Materials</p>
+    <h1 class="text-5xl font-bold tracking-tight md:text-6xl">
+      {course}
+      {title && <span class="mt-3 block bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-3xl font-semibold text-transparent md:text-4xl">{title}</span>}
+    </h1>
+  </section>
+
+  {sections.map((s) => (
+    <section class="relative z-10 mx-auto max-w-7xl px-6 py-10">
+      <div class="mb-6 flex items-center gap-4">
+        <span class={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${s.color} text-[#05070d]`}>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d={s.icon} />
+          </svg>
+        </span>
+        <h2 class={`bg-gradient-to-r ${s.color} bg-clip-text text-3xl font-bold text-transparent`}>{s.label}</h2>
+        <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-400">{s.files.length} {s.files.length === 1 ? "file" : "files"}</span>
+      </div>
+
+      {s.files.length === 0 ? (
+        <div class="rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-8 text-center text-gray-500">
+          Materials will be posted here soon.
+        </div>
+      ) : (
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {s.files.map((f) => (
+            <a href={f.href} target="_blank" class="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-white/25 hover:bg-white/[0.08]">
+              <div class="flex items-center gap-4">
+                <span class={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${s.color} text-xs font-bold text-[#05070d]`}>{f.ext}</span>
+                <span class="font-medium text-gray-200 group-hover:text-white">{f.name}</span>
+              </div>
+              <svg class="h-5 w-5 shrink-0 text-gray-500 transition group-hover:text-blue-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <path d="M7 10l5 5 5-5"/>
+                <path d="M12 15V3"/>
+              </svg>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+  ))}
+
+  <footer class="relative z-10 mt-12 border-t border-white/10 px-6 py-8 text-center text-sm text-gray-500">
+    © 2026 Masoud Ataei. Built with Astro.
+  </footer>
+
+  <Mascot />
+</main>
+</body>
+</html>
