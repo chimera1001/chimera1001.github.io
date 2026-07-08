@@ -1,0 +1,671 @@
+---
+import "../styles/global.css";
+import fs from "node:fs";
+import path from "node:path";
+import Background from "../components/Background.astro";
+import Mascot from "../components/Mascot.astro";
+
+// ===== EXPERIENCE (Appointments + Postdoctoral Research) =====
+const experience = [
+  {
+    role: "Assistant Professor, Statistics (LTA)",
+    org: "University of Toronto, Ontario, Canada",
+    period: "2021 &ndash; 2026",
+    points: [
+      "Department of Mathematical and Computational Sciences, University of Toronto Mississauga.",
+    ],
+  },
+  {
+    role: "Lead Machine Learning Scientist",
+    org: "York University, Ontario, Canada",
+    period: "2022 &ndash; 2024",
+    points: [
+      "Research topic: \u201CMachine Learning Solutions for Infant Pain Assessment: Identification of Neuropsychological Biomarkers of Pain via Analysis of Concurrent EEG-ECG Signals.\u201D",
+      "Multi-national, multidisciplinary collaboration across York University, University College London, Mount Sinai and University College London hospitals \u2014 $1.89M Grant (NCT05579496).",
+    ],
+  },
+  {
+    role: "Research Associate",
+    org: "York University, Ontario, Canada",
+    period: "2020 &ndash; 2022",
+    points: [
+      "Research topic: \u201CMixed-integer Nonlinear Programming (MINLP) Models for Exact and Interpretable Formulation of Neural Networks.\u201D",
+    ],
+  },
+];
+
+// ===== EDUCATION =====
+const education = [
+  {
+    degree: "Ph.D. in Mathematics and Statistics",
+    school: "York University, Ontario, Canada (2015 &ndash; 2020)",
+    note: "Dissertation: \u201CPortfolio Optimization Using Financial Chaos Index and Time-homogeneous Top-K Ranking Algorithm.\u201D Nominated unanimously for the best dissertation prize, recognized for its significant contributions to financial mathematics and tensor analysis.",
+    link: "http://hdl.handle.net/10315/37949",
+  },
+  {
+    degree: "M.Sc. in Applied and Industrial Mathematics",
+    school: "York University, Ontario, Canada (2013 &ndash; 2015)",
+    note: "Thesis: \u201CA Branch-and-Price Algorithm for Bin Packing Problem.\u201D",
+    link: "http://hdl.handle.net/10315/30728",
+  },
+  {
+    degree: "B.Sc. in Industrial Engineering",
+    school: "Sharif University of Technology, Tehran, Iran (2008 &ndash; 2013)",
+    note: "Thesis: \u201CSpatial Statistics and Kriging Meta-modelling for Simulation Optimization.\u201D",
+    link: "",
+  },
+];
+
+// ===== RESEARCH HIGHLIGHTS =====
+const research = [
+  {
+    group: "Lehmer Neural Networks",
+    color: "from-blue-400 to-cyan-400",
+    text: "Compact, interpretable neural networks built on Lehmer Activation Units — a unified operator for feature weighting, attention, and nonlinearity with universal approximation guarantees.",
+  },
+  {
+    group: "Lehmer Transform",
+    color: "from-purple-400 to-fuchsia-400",
+    text: "A representation-learning framework mapping non-stationary signals into suddency moment space, extending feature extraction beyond Fourier and wavelet methods.",
+  },
+  {
+    group: "Derangetropy",
+    color: "from-emerald-400 to-teal-400",
+    text: "Entropy-modulated functional operators on probability densities for modeling nonlinear information dynamics, feedback, and uncertainty propagation.",
+  },
+  {
+    group: "Optimization for Interpretable AI",
+    color: "from-amber-400 to-orange-400",
+    text: "Mixed-integer, semidefinite, and conic programming formulations of neural networks for globally optimal, interpretable, and formally verifiable learning.",
+  },
+  {
+    group: "Financial Chaos Index",
+    color: "from-rose-400 to-pink-400",
+    text: "A chaos-theoretic index for quantifying turbulence in financial markets, with applications to portfolio optimization, market efficiency, and volatility-regime modeling.",
+  },
+  {
+    group: "Tensor Methods & Time Series",
+    color: "from-sky-400 to-indigo-400",
+    text: "Tensor algebra, decomposition and regression methods, tensor low-rank learning, and nonstationary time-series analysis for complex stochastic systems.",
+  },
+];
+
+// ===== PEER-REVIEWED PUBLICATIONS =====
+const papers = [
+  {
+    venue: "Entropy 2026",
+    year: "2026",
+    title: "Compact and Interpretable Neural Networks Using Lehmer Activation Units",
+    authors: "Masoud Ataei, Sepideh Forouzi, Xiaogang Wang",
+    note: "Entropy, 28(2):157, 2026.",
+    link: "https://www.mdpi.com/1099-4300/28/2/157",
+  },
+  {
+    venue: "MSMSE 2026",
+    year: "2026",
+    title: "Inferring Grain Size Distribution from Magnetic Hysteresis in Ferrites",
+    authors: "Masoud Ataei, Mohammad J. Molaei, Abolghasem Ataie",
+    note: "Modelling and Simulation in Materials Science and Engineering, 34(4):045004, 2026.",
+    link: "https://iopscience.iop.org/article/10.1088/1361-651X/ae6c40",
+  },
+  {
+    venue: "Entropy 2025",
+    year: "2025",
+    title: "Generalized Derangetropy Functionals for Modeling Cyclical Information Flow",
+    authors: "Masoud Ataei, Xiaogang Wang",
+    note: "Entropy, 27(6):608, 2025.",
+    link: "https://www.mdpi.com/1099-4300/27/6/608",
+  },
+  {
+    venue: "Entropy 2024",
+    year: "2024",
+    title: "Derangetropy in Probability Distributions and Information Dynamics",
+    authors: "Masoud Ataei, Xiaogang Wang",
+    note: "Entropy, 26(11):996, 2024.",
+    link: "https://doi.org/10.3390/e26110996",
+  },
+  {
+    venue: "IJACT 2025",
+    year: "2025",
+    title: "Structural Memory Effects in M-type Hexaferrite Magnets",
+    authors: "Mohammad J. Molaei, Masoud Ataei, Abolghasem Ataie",
+    note: "International Journal of Applied Ceramic Technology, e15189, 2025.",
+    link: "https://doi.org/10.1111/ijac.15189",
+  },
+  {
+    venue: "TechTrends 2025",
+    year: "2025",
+    title: "AI Meets Academia: Enhancing Statistics Education with ChatGPT in Undergraduate Courses",
+    authors: "Luai Al-Labadi, Omidali A. Jazi, Masoud Ataei, Kairui Bao, Ruodie Yu",
+    note: "TechTrends, 1&ndash;9, 2025.",
+    link: "https://link.springer.com/article/10.1007/s11528-025-01112-x",
+  },
+  {
+    venue: "Scientific Reports 2022",
+    year: "2022",
+    title: "Theory of Lehmer Transform and Its Applications in Identifying the Electroencephalographic Signature of Major Depressive Disorder",
+    authors: "Masoud Ataei, Xiaogang Wang",
+    note: "Scientific Reports, 12(1):1&ndash;15, 2022.",
+    link: "https://rdcu.be/cNsFa",
+  },
+  {
+    venue: "Physica A 2021",
+    year: "2021",
+    title: "Theory and Applications of Financial Chaos Index",
+    authors: "Masoud Ataei, Shengyuan Chen, Zijiang Yang, M. Reza Peyghami",
+    note: "Physica A: Statistical Mechanics and Its Applications, 580:126160, 2021.",
+    link: "https://www.sciencedirect.com/science/article/pii/S0378437121004337",
+  },
+  {
+    venue: "Optim. Methods & Software 2020",
+    year: "2020",
+    title: "Time-homogeneous Top-K Ranking Using Tensor Decompositions",
+    authors: "Masoud Ataei, Shengyuan Chen, Zijiang Yang, M. Reza Peyghami",
+    note: "Optimization Methods and Software, 35(6):1119&ndash;1143, 2020.",
+    link: "https://doi.org/10.1080/10556788.2019.1584623",
+  },
+  {
+    venue: "LNCS 2018",
+    year: "2018",
+    title: "Accelerated Gradient and Block-wise Gradient Methods for Big Data Factorization",
+    authors: "M. Reza Peyghami, Kevin Yang, Shengyuan Chen, Zijiang Yang, Masoud Ataei",
+    note: "Advances in Artificial Intelligence, LNCS 10832:231&ndash;238. Springer, Cham, 2018.",
+    link: "https://rdcu.be/c1ECX",
+  },
+];
+
+// ===== PREPRINTS =====
+const preprints = [
+  {
+    title: "Mixed-integer Nonlinear Programming (MINLP) Models for Exact and Interpretable Formulation of Neural Networks",
+    authors: "Masoud Ataei, Edrin Hasaj, Jacob Gipp, Sepideh Forouzi",
+    link: "https://arxiv.org/abs/2504.14356",
+  },
+  {
+    title: "A Geometrical Branch-and-Price Algorithm for Big Bin Packing Problems",
+    authors: "Masoud Ataei, Shengyuan Chen",
+    link: "https://arxiv.org/abs/1909.00510",
+  },
+  {
+    title: "Modeling Regime Structure and Informational Drivers of Stock Market Volatility via the Financial Chaos Index",
+    authors: "Masoud Ataei",
+    link: "https://arxiv.org/abs/2504.18958",
+  },
+  {
+    title: "Multiscale Causal Analysis of Market Efficiency via News Uncertainty Networks and the Financial Chaos Index",
+    authors: "Masoud Ataei",
+    link: "https://arxiv.org/abs/2505.01543",
+  },
+  {
+    title: "Modeling Informational Resonance in Spatio-Temporal Systems",
+    authors: "Masoud Ataei",
+    link: "https://arxiv.org/abs/2506.19251",
+  },
+  {
+    title: "Statistical Geometry and Information Dynamics on Hyperspherical Surfaces",
+    authors: "Masoud Ataei",
+    link: "https://www.preprints.org/manuscript/202506.1780/v1",
+  },
+];
+
+// ===== TEACHING =====
+const teaching = [
+  { code: "STA457", name: "Applied Time Series Analysis", terms: "W21, W22, W23", link: "https://utm.calendar.utoronto.ca/course/sta457h5" },
+  { code: "STA260", name: "Mathematical Statistics", terms: "F21, F22, F23, F24, S25, F25, W26", link: "https://utm.calendar.utoronto.ca/course/sta260h5" },
+  { code: "STA256", name: "Probability Theory", terms: "S21, S22, W24, S24, F24, W25, S25, F25, W26", link: "https://utm.calendar.utoronto.ca/course/sta256h5" },
+  { code: "STA107", name: "Introduction to Probability and Modelling", terms: "S22, W23, S23, W24, S24", link: "https://utm.calendar.utoronto.ca/course/sta107h5" },
+  { code: "STA258", name: "Statistics with Applied Probability", terms: "W25, W26", link: "https://utm.calendar.utoronto.ca/course/sta258h5" },
+  { code: "STA314", name: "Introduction to Statistical Learning", terms: "F23", link: "https://utm.calendar.utoronto.ca/course/sta314h5" },
+  { code: "STA215", name: "Introduction to Applied Statistics", terms: "F22", link: "" },
+  { code: "CSCC11", name: "Introduction to Machine Learning", terms: "F21", link: "https://utsc.calendar.utoronto.ca/course/cscc11h3" },
+  { code: "MAT102", name: "Introduction to Mathematical Proofs", terms: "F25", link: "https://utm.calendar.utoronto.ca/course/mat102h5" },
+  { code: "MAT344", name: "Introduction to Combinatorics", terms: "W26", link: "https://utm.calendar.utoronto.ca/course/mat344h5" },
+  { code: "MAT135", name: "Differential Calculus", terms: "F21", link: "https://utm.calendar.utoronto.ca/course/mat135h5" },
+  { code: "MATH4171", name: "Nonlinear Optimization (York University)", terms: "W16", link: "https://www.yorku.ca/science/mathstats/4000-level-courses/" },
+];
+
+// Courses that have a materials page = every folder inside public/courses/
+const coursesDir = path.resolve("./public/courses");
+const materialCourses = fs.existsSync(coursesDir)
+  ? fs
+      .readdirSync(coursesDir)
+      .filter((d) => fs.statSync(path.join(coursesDir, d)).isDirectory())
+      .sort()
+  : [];
+
+// ===== SUPERVISION =====
+const supervision = [
+  { topic: "Unsupervised Learning for Stock Market Sector Analysis", student: "Bryan McNamara", year: "2025" },
+  { topic: "Mathematical Programming for Large Language Models", student: "Jacob Gipp", year: "2024" },
+  { topic: "Mathematical Programming Models for Deep Learning", student: "Yupeng Zhan", year: "2024" },
+  { topic: "Operations Research for Interpretable Artificial Intelligence", student: "Edrin Hasaj", year: "2024" },
+  { topic: "A Regime-Based Black-Litterman Model for Asset Allocation", student: "Yupeng Zhan", year: "2024" },
+  { topic: "Stock Market Fluctuations, Anomalies and Fear Index Analysis", student: "Agathe Rives", year: "2024" },
+  { topic: "Bayesian Statistics for Tensor-on-Tensor Regression", student: "Harvin Lachhar", year: "2023" },
+  { topic: "Genetic Algorithm for Tensor Regression Problems", student: "Harvin Lachhar", year: "2023" },
+  { topic: "Markov Chains with Memory Models Using Tensors", student: "Zhengyang Fei", year: "2023" },
+];
+
+// ===== TALKS & PRESENTATIONS =====
+const talks = [
+  {
+    kind: "Invited Talk",
+    year: "2025",
+    title: "Applications of Lehmer Transform to Biological Signal Processing",
+    venue: "Center for Mathematical Medicine, Fields Institute, Toronto, Canada",
+    link: "https://youtu.be/9iPpLWhS7e8?si=jiALupF4M_5LOWnQ",
+    linkLabel: "Watch Video",
+  },
+  {
+    kind: "Invited Talk",
+    year: "2021",
+    title: "Financial Chaos Index: An Axiomatic Framework for Modeling and Analysis of Complex Systems",
+    venue: "Department of Mathematics Colloquiums, Ohio University, Athens, U.S.A.",
+    link: "",
+    linkLabel: "",
+  },
+  {
+    kind: "Conference",
+    year: "2019",
+    title: "Explicit-implicit Semidefinite Programming Relaxation Scheme in Combinatorial Optimization",
+    venue: "The V International Applied Mathematics, Modeling and Computational Science Conference, Waterloo University, Canada",
+    link: "http://ammcs.wlu.ca/2019/conference-program/ammcs2019_program.pdf",
+    linkLabel: "Program",
+  },
+  {
+    kind: "Conference",
+    year: "2015",
+    title: "A Branch-and-Price Algorithm for Bin Packing Problems",
+    venue: "CORS/INFORMS International Conference, Montreal, Quebec, Canada",
+    link: "https://meetings.informs.org/montreal2015/assets/CORS%202015%20Program.pdf",
+    linkLabel: "Program",
+  },
+  {
+    kind: "Workshop",
+    year: "2019",
+    title: "Billboard Top 100 for Canadian Equities: Applications of Tensor Methods in Stock Market",
+    venue: "Fields&ndash;Scotiabank Industrial Problem Solving Workshop, Fields Institute, Toronto, Canada",
+    link: "http://www.fields.utoronto.ca/sites/default/files/Scotiobank_IPSW_2019.pdf",
+    linkLabel: "Project Report",
+  },
+  {
+    kind: "Workshop",
+    year: "2017",
+    title: "Analysis of Brokers in Toronto Stock Exchange",
+    venue: "Fields&ndash;China Joint Industrial Problem Solving Workshop in Finance, Fields Institute, Toronto, Canada",
+    link: "http://www.fields.utoronto.ca/sites/default/files/ipsw-2017-tmx-broker-analysis.pdf",
+    linkLabel: "Project Report",
+  },
+];
+
+const kindColors: Record<string, string> = {
+  "Invited Talk": "bg-purple-500/15 text-purple-200",
+  "Conference": "bg-blue-500/15 text-blue-200",
+  "Workshop": "bg-emerald-500/15 text-emerald-200",
+};
+
+// ===== SKILLS =====
+const skills = [
+  { group: "Programming Languages", color: "from-blue-400 to-cyan-400", items: "Python, MATLAB, Mathematica, R; C, C++, C++ Armadillo" },
+  { group: "ML & GPU Computing", color: "from-purple-400 to-fuchsia-400", items: "TensorFlow, PyTorch" },
+  { group: "Optimization Solvers", color: "from-emerald-400 to-teal-400", items: "Gurobi, MOSEK, CPLEX, BARON, IPOPT" },
+  { group: "Optimization Modelling", color: "from-amber-400 to-orange-400", items: "Pyomo, YALMIP, AMPL, LINDO" },
+  { group: "Systems & Cloud", color: "from-sky-400 to-indigo-400", items: "AWS; Linux (Arch, RHEL, Debian); GitHub" },
+  { group: "Teaching Platforms", color: "from-rose-400 to-pink-400", items: "Quercus, Canvas, D2L" },
+];
+
+// ===== UPDATES =====
+const updates = [
+  { date: "2026", text: "Our paper on Lehmer Activation Units was published in Entropy (MDPI)!" },
+  { date: "2026", text: "\u201CInferring Grain Size Distribution from Magnetic Hysteresis in Ferrites\u201D published in Modelling and Simulation in Materials Science and Engineering." },
+  { date: "2025", text: "\u201CGeneralized Derangetropy Functionals for Modeling Cyclical Information Flow\u201D published in Entropy (MDPI)." },
+  { date: "2025", text: "Invited talk on the Lehmer Transform at the Center for Mathematical Medicine, Fields Institute, Toronto." },
+  { date: "2025", text: "\u201CAI Meets Academia\u201D on enhancing statistics education with ChatGPT published in TechTrends." },
+  { date: "2024", text: "\u201CDerangetropy in Probability Distributions and Information Dynamics\u201D published in Entropy (MDPI)." },
+];
+---
+<main class="relative min-h-screen bg-[#05070d] text-white">
+
+  <Background />
+
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#05070d]/70 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <a href="/" class="text-lg font-semibold tracking-wide">Masoud Ataei</a>
+      <div class="hidden gap-6 text-sm text-gray-300 md:flex">
+        <a href="#experience" class="hover:text-white">Experience</a>
+        <a href="#education" class="hover:text-white">Education</a>
+        <a href="#research" class="hover:text-white">Research</a>
+        <a href="#publications" class="hover:text-white">Publications</a>
+        <a href="#teaching" class="hover:text-white">Teaching</a>
+        <a href="#talks" class="hover:text-white">Talks</a>
+        <a href="#skills" class="hover:text-white">Skills</a>
+        <a href="#updates" class="hover:text-white">Updates</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO: text pushed far down so it sits BELOW the 3D shape -->
+  <section class="relative z-10 mx-auto grid max-w-7xl gap-12 px-6 pt-[34rem] pb-24 md:grid-cols-[0.9fr_1.1fr] md:items-start md:pt-[26rem]">
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_70%,rgba(59,130,246,0.18),transparent_30%),radial-gradient(circle_at_80%_80%,rgba(168,85,247,0.18),transparent_30%)]"></div>
+
+    <div class="flex justify-center md:sticky md:top-32">
+      <div class="relative">
+        <div class="absolute -inset-4 rounded-full bg-blue-500/20 blur-2xl"></div>
+        <img
+          src="/images/profile.jpg"
+          alt="Masoud Ataei"
+          class="relative h-72 w-72 rounded-full border border-white/20 object-cover shadow-2xl md:h-96 md:w-96"
+        />
+      </div>
+    </div>
+
+    <div>
+      <p class="mb-5 text-sm uppercase tracking-[0.35em] text-blue-300">
+        Statistics &middot; Time Series &middot; Tensor Learning &middot; Interpretable AI
+      </p>
+
+      <h1 class="mb-6 text-5xl font-bold tracking-tight md:text-7xl">
+        Masoud Ataei, PhD
+      </h1>
+
+      <div class="mb-8 max-w-2xl space-y-4 text-xl leading-8 text-gray-300">
+        <p>Hi! I'm Masoud.</p>
+
+        <p>
+          I am an Assistant Professor of Statistics in the Department of Mathematical and Computational Sciences at the <a href="https://www.utm.utoronto.ca/" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">University of Toronto Mississauga</a>. I hold a Ph.D. in Mathematics and Statistics from <a href="https://www.yorku.ca/" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">York University</a>, where my dissertation was unanimously nominated for the best dissertation prize.
+        </p>
+
+        <p>
+          My research interests lie in <span class="text-gray-100">mathematical statistics</span>, <span class="text-gray-100">stochastic processes and nonstationary time-series analysis</span>, <span class="text-gray-100">tensor algebra, decomposition and low-rank learning</span>, and <span class="text-gray-100">mixed-integer, semidefinite and conic programming for interpretable artificial intelligence</span>.
+        </p>
+
+        <p>
+          I am the inventor of several novel methods, including <a href="https://www.mdpi.com/1099-4300/28/2/157" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Lehmer Neural Networks</a>, the <a href="https://rdcu.be/cNsFa" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Lehmer Transform</a> for non-stationary signal representation, and <a href="https://doi.org/10.3390/e26110996" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">Derangetropy</a> for modeling information dynamics. Previously, I served as the lead machine learning scientist on a <a href="https://www.yorku.ca/research/category/news/2019/05/researchers-win-1-89m-grant-to-search-for-ai-solution-to-infant-pain-assessment/" target="_blank" class="text-blue-300 underline-offset-4 hover:text-blue-100 hover:underline">$1.89M multi-institutional research program</a> on AI solutions for infant pain assessment.
+        </p>
+
+        <p>
+          I always welcome opportunities for research collaboration and enjoy working with motivated students.
+        </p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap items-center gap-6">
+
+        <a href="https://mcs.utm.utoronto.ca/~ataeimas/" target="_blank" class="transition hover:scale-110" title="Academic Homepage">
+          <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>
+            <circle cx="12" cy="12" r="9"/>
+          </svg>
+        </a>
+
+        <a href="https://scholar.google.ca/citations?user=jhwzJf0AAAAJ&hl=en" target="_blank" class="transition hover:scale-110" title="Google Scholar">
+          <svg class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/>
+          </svg>
+        </a>
+
+        <a href="https://github.com/chimera1001" target="_blank" class="transition hover:scale-110" title="GitHub">
+          <svg class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.29 9.42 7.86 10.95.58.1.79-.25.79-.56v-2.18c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.41-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .98-.31 3.2 1.18A11.1 11.1 0 0 1 12 5.99c.99 0 1.99.13 2.92.39 2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.42-2.69 5.39-5.25 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.67.8.56A11.52 11.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/>
+          </svg>
+        </a>
+
+        <a href="https://ca.linkedin.com/in/masoudataei" target="_blank" class="transition hover:scale-110" title="LinkedIn">
+          <svg class="h-8 w-8 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.5 8h4V24h-4V8Zm7.5 0h3.8v2.2h.05c.53-1 1.84-2.2 3.8-2.2 4.06 0 4.85 2.67 4.85 6.15V24h-4v-8.7c0-2.08-.04-4.75-2.9-4.75-2.9 0-3.35 2.27-3.35 4.6V24h-4V8Z"/>
+          </svg>
+        </a>
+
+        <a href="https://www.researchgate.net/profile/Masoud-Ataei" target="_blank" class="transition hover:scale-110" title="ResearchGate">
+          <svg class="h-8 w-8 text-[#00CCBB]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19.586 0c-.818 0-1.508.19-2.073.565-.563.377-.97.936-1.213 1.68a3.193 3.193 0 0 0-.112.437 8.365 8.365 0 0 0-.078.53 9 9 0 0 0-.05.727c-.01.282-.013.621-.013 1.016a31.121 31.121 0 0 0 .014 1.017 9 9 0 0 0 .05.727 7.946 7.946 0 0 0 .077.53h-.005a3.334 3.334 0 0 0 .113.438c.245.743.65 1.303 1.214 1.68.565.376 1.256.564 2.075.564.8 0 1.536-.213 2.105-.603.57-.39.94-.916 1.175-1.65.076-.235.135-.558.177-.93a10.9 10.9 0 0 0 .043-1.207v-.82c0-.095-.047-.142-.14-.142h-3.064c-.094 0-.14.047-.14.141v.956c0 .094.046.14.14.14h1.666c.056 0 .084.03.084.086 0 .36 0 .62-.036.865-.038.244-.1.447-.147.606-.108.385-.348.664-.638.876-.29.212-.738.35-1.227.35-.545 0-.901-.15-1.21-.353-.306-.203-.517-.454-.67-.915a3.136 3.136 0 0 1-.147-.762 17.366 17.366 0 0 1-.034-.656c-.01-.26-.014-.572-.014-.939a26.401 26.401 0 0 1 .014-.938 15.821 15.821 0 0 1 .035-.656 3.19 3.19 0 0 1 .148-.76c.153-.462.362-.715.67-.919.307-.203.664-.353 1.209-.353.489 0 .937.14 1.227.351.29.212.53.491.638.876.014.047.062.078.11.062l1.187-.386c.049-.016.078-.065.062-.113-.235-.735-.605-1.26-1.175-1.65C21.122.213 20.386 0 19.586 0zM8.217 5.836c-1.69 0-3.036.086-4.297.086-1.146 0-2.291 0-3.007-.029v.831l1.088.2c.744.144 1.174.488 1.174 2.264v10.923c0 1.777-.43 2.12-1.174 2.263l-1.088.2v.832c.773-.029 2.12-.086 3.465-.086 1.29 0 2.951.057 3.667.086v-.831l-1.49-.2c-.773-.115-1.174-.487-1.174-2.264v-4.784c.688.057 1.29.057 2.206.057 1.748 3.123 3.41 5.472 4.355 6.56.86 1.032 2.177 1.691 3.839 1.691.487 0 1.003-.086 1.318-.23v-.744c-1.031 0-2.063-.716-2.808-1.518-1.26-1.376-2.95-3.582-4.355-6.074 2.32-.545 4.04-2.492 4.04-4.9 0-2.951-2.492-4.333-5.759-4.333zm-.86 1.29c2.406 0 3.839 1.26 3.839 3.352 0 2.263-1.547 3.61-4.097 3.61-.774 0-1.29-.03-1.719-.086V7.24c.487-.086 1.117-.115 1.977-.115z"/>
+          </svg>
+        </a>
+
+        <a href="https://orcid.org/0000-0002-1114-1760" target="_blank" class="transition hover:scale-110" title="ORCID">
+          <svg class="h-8 w-8 text-[#A6CE39]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947a.95.95 0 0 1-.947.947.943.943 0 0 1-.947-.947c0-.516.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.097-3.722h-2.222z"/>
+          </svg>
+        </a>
+
+        <a href="mailto:masoud.ataei@utoronto.ca" class="transition hover:scale-110" title="Email">
+          <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M4 4h16v16H4z"/>
+            <path d="m4 6 8 7 8-7"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
+  <section id="experience" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-10 text-4xl font-bold">Appointments & Research Positions</h2>
+    <div class="space-y-6">
+      {experience.map((e) => (
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-7">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="text-2xl font-semibold" set:html={e.role} />
+            <span class="text-sm text-gray-500" set:html={e.period} />
+          </div>
+          <p class="mt-1 text-blue-300">{e.org}</p>
+          {e.points.length > 0 && (
+            <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-400">
+              {e.points.map((pt) => (<li>{pt}</li>))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="education" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-10 text-4xl font-bold">Education</h2>
+    <div class="space-y-6">
+      {education.map((e) => (
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-7">
+          <h3 class="text-2xl font-semibold">{e.degree}</h3>
+          <p class="mt-1 text-blue-300" set:html={e.school} />
+          {e.note && <p class="mt-2 text-gray-400 italic">{e.note}</p>}
+          {e.link && (
+            <a href={e.link} target="_blank" class="mt-3 inline-flex items-center gap-2 text-sm font-medium text-blue-300 hover:text-blue-100">
+              View Thesis
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <path d="M15 3h6v6"/>
+                <path d="M10 14 21 3"/>
+              </svg>
+            </a>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="research" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-3 text-4xl font-bold">Research Highlights</h2>
+    <p class="mb-10 text-gray-400">Novel methods and research themes I have developed and worked on.</p>
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {research.map((r) => (
+        <div class="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition hover:border-white/20 hover:bg-white/[0.07]">
+          <div class={`h-1.5 w-full bg-gradient-to-r ${r.color}`}></div>
+          <div class="p-6">
+            <h3 class={`mb-3 bg-gradient-to-r ${r.color} bg-clip-text text-lg font-semibold text-transparent`}>{r.group}</h3>
+            <p class="text-sm leading-6 text-gray-400">{r.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="publications" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-10 text-4xl font-bold">Peer-Reviewed Publications</h2>
+    <div class="space-y-5">
+      {papers.map((p) => (
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-7 transition hover:border-blue-400/40 hover:bg-white/[0.07]">
+          <div class="mb-3 flex items-center gap-3">
+            <span class="rounded-full bg-blue-500/15 px-3 py-1 text-xs font-medium text-blue-200" set:html={p.venue} />
+            <span class="text-xs text-gray-500">{p.year}</span>
+          </div>
+          <h3 class="text-2xl font-semibold leading-snug">
+            <a href={p.link} target="_blank" class="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent transition hover:from-blue-200 hover:to-purple-200">
+              {p.title}
+            </a>
+          </h3>
+          <p class="mt-3 text-sm text-gray-400">{p.authors}</p>
+          <p class="mt-1 text-sm italic text-gray-500" set:html={p.note} />
+          <a href={p.link} target="_blank" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-300 hover:text-blue-100">
+            View Paper
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <path d="M15 3h6v6"/>
+              <path d="M10 14 21 3"/>
+            </svg>
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <h2 class="mb-10 mt-20 text-4xl font-bold">Preprints</h2>
+    <div class="grid gap-5 md:grid-cols-2">
+      {preprints.map((p) => (
+        <a href={p.link} target="_blank" class="group block rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:border-blue-400/40 hover:bg-white/[0.07]">
+          <h3 class="text-lg font-semibold leading-snug text-gray-100 group-hover:text-white">{p.title}</h3>
+          <p class="mt-2 text-sm text-gray-400">{p.authors}</p>
+          <span class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-300 group-hover:text-blue-100">
+            View Preprint
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <path d="M15 3h6v6"/>
+              <path d="M10 14 21 3"/>
+            </svg>
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section id="teaching" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-3 text-4xl font-bold">Teaching</h2>
+    <p class="mb-10 text-gray-400">Courses taught at the University of Toronto and York University.</p>
+
+    {materialCourses.length > 0 && (
+      <div class="mb-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {materialCourses.map((c) => {
+          const info = teaching.find((t) => t.code === c);
+          return (
+            <a href={`/courses/${c.toLowerCase()}/`} class="group block overflow-hidden rounded-3xl border border-blue-400/30 bg-blue-500/10 transition hover:border-blue-300/60 hover:bg-blue-500/15">
+              <div class="h-1.5 w-full bg-gradient-to-r from-blue-400 to-purple-400"></div>
+              <div class="p-6">
+                <h3 class="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-xl font-semibold text-transparent">{c}{info ? ` \u2014 ${info.name}` : ""}</h3>
+                <p class="mt-2 text-sm text-gray-400">Lecture notes, homeworks & past exams</p>
+                <span class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-300 group-hover:text-blue-100">
+                  Course Materials
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M5 12h14"/>
+                    <path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    )}
+
+    <div class="grid gap-4 md:grid-cols-2">
+      {teaching.map((t) => (
+        <div class="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div>
+            <p class="font-semibold text-gray-100">
+              {t.link ? (
+                <a href={t.link} target="_blank" class="hover:text-blue-200">
+                  <span class="text-blue-300">{t.code}</span> &middot; {t.name}
+                </a>
+              ) : (
+                <><span class="text-blue-300">{t.code}</span> &middot; {t.name}</>
+              )}
+            </p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-gray-500">{t.terms}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <h2 class="mb-6 mt-16 text-4xl font-bold">Undergraduate Research Supervision</h2>
+    <div class="space-y-3">
+      {supervision.map((s) => (
+        <div class="flex flex-wrap items-baseline justify-between gap-2 rounded-2xl border border-white/10 bg-white/5 p-5">
+          <p class="text-gray-300">{s.topic} <span class="text-gray-500">&mdash; {s.student}</span></p>
+          <span class="text-xs uppercase tracking-wider text-blue-300">{s.year}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="talks" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-10 text-4xl font-bold">Talks & Presentations</h2>
+    <div class="space-y-5">
+      {talks.map((t) => (
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-7 transition hover:border-blue-400/40 hover:bg-white/[0.07]">
+          <div class="mb-3 flex items-center gap-3">
+            <span class={`rounded-full px-3 py-1 text-xs font-medium ${kindColors[t.kind]}`}>{t.kind}</span>
+            <span class="text-xs text-gray-500">{t.year}</span>
+          </div>
+          <h3 class="text-2xl font-semibold leading-snug">{t.title}</h3>
+          <p class="mt-2 text-sm text-gray-400" set:html={t.venue} />
+          {t.link && (
+            <a href={t.link} target="_blank" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-300 hover:text-blue-100">
+              {t.linkLabel}
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <path d="M15 3h6v6"/>
+                <path d="M10 14 21 3"/>
+              </svg>
+            </a>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="skills" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-10 text-4xl font-bold">Computer & Programming Skills</h2>
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {skills.map((s) => (
+        <div class="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition hover:border-white/20 hover:bg-white/[0.07]">
+          <div class={`h-1.5 w-full bg-gradient-to-r ${s.color}`}></div>
+          <div class="p-6">
+            <h3 class={`mb-2 bg-gradient-to-r ${s.color} bg-clip-text text-lg font-semibold text-transparent`}>{s.group}</h3>
+            <p class="text-gray-400">{s.items}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <h2 class="mb-6 mt-16 text-4xl font-bold">Languages</h2>
+    <p class="text-lg text-gray-300">English (fully proficient) &middot; Persian (native) &middot; Turkish (native) &middot; Azeri (native)</p>
+  </section>
+
+  <section id="updates" class="relative z-10 mx-auto max-w-7xl px-6 py-24">
+    <h2 class="mb-12 text-center text-4xl font-bold">Latest Updates</h2>
+    <div class="relative mx-auto max-w-3xl">
+      <div class="absolute left-24 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500 via-purple-500 to-transparent"></div>
+      <div class="space-y-8">
+        {updates.map((u) => (
+          <div class="relative flex items-start gap-6">
+            <div class="w-20 shrink-0 pt-4 text-right text-xs uppercase tracking-wider text-blue-300">{u.date}</div>
+            <div class="relative mt-5 h-2 w-2 shrink-0 rounded-full bg-blue-400 ring-4 ring-blue-500/20"></div>
+            <div class="flex-1 rounded-2xl border border-white/10 bg-white/5 p-5 text-gray-300">{u.text}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <footer class="relative z-10 border-t border-white/10 px-6 py-8 text-center text-sm text-gray-500">
+    © 2026 Masoud Ataei. Built with Astro.
+  </footer>
+
+  <Mascot />
+</main>
