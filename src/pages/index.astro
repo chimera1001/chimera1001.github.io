@@ -67,31 +67,37 @@ const research = [
   {
     group: "Lehmer Neural Networks",
     color: "from-blue-400 to-cyan-400",
+    link: "https://www.mdpi.com/1099-4300/28/2/157",
     text: "Compact, interpretable neural networks built on Lehmer Activation Units — a unified operator for feature weighting, attention, and nonlinearity with universal approximation guarantees.",
   },
   {
     group: "Lehmer Transform",
     color: "from-purple-400 to-fuchsia-400",
+    link: "https://rdcu.be/cNsFa",
     text: "A representation-learning framework mapping non-stationary signals into suddency moment space, extending feature extraction beyond Fourier and wavelet methods.",
   },
   {
     group: "Derangetropy",
     color: "from-emerald-400 to-teal-400",
+    link: "https://doi.org/10.3390/e26110996",
     text: "Entropy-modulated functional operators on probability densities for modeling nonlinear information dynamics, feedback, and uncertainty propagation.",
   },
   {
     group: "Optimization for Interpretable AI",
     color: "from-amber-400 to-orange-400",
+    link: "https://arxiv.org/abs/2504.14356",
     text: "Mixed-integer, semidefinite, and conic programming formulations of neural networks for globally optimal, interpretable, and formally verifiable learning.",
   },
   {
     group: "Financial Chaos Index",
     color: "from-rose-400 to-pink-400",
+    link: "https://www.sciencedirect.com/science/article/pii/S0378437121004337",
     text: "A chaos-theoretic index for quantifying turbulence in financial markets, with applications to portfolio optimization, market efficiency, and volatility-regime modeling.",
   },
   {
     group: "Tensor Methods & Time Series",
     color: "from-sky-400 to-indigo-400",
+    link: "https://doi.org/10.1080/10556788.2019.1584623",
     text: "Tensor algebra, decomposition and regression methods, tensor low-rank learning, and nonstationary time-series analysis for complex stochastic systems.",
   },
 ];
@@ -390,7 +396,7 @@ const updates = [
         </p>
 
         <p>
-          I always welcome opportunities for research collaboration and enjoy working with motivated students.
+          I always welcome opportunities for research collaboration and enjoy working with motivated peers.
         </p>
       </div>
 
@@ -505,13 +511,13 @@ const updates = [
     <p class="mb-10 text-gray-400">Novel methods and research themes I have developed and worked on.</p>
     <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       {research.map((r) => (
-        <div class="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition hover:border-white/20 hover:bg-white/[0.07]">
+        <a href={r.link} target="_blank" class="group block overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition hover:border-white/20 hover:bg-white/[0.07]">
           <div class={`h-1.5 w-full bg-gradient-to-r ${r.color}`}></div>
           <div class="p-6">
             <h3 class={`mb-3 bg-gradient-to-r ${r.color} bg-clip-text text-lg font-semibold text-transparent`}>{r.group}</h3>
             <p class="text-sm leading-6 text-gray-400">{r.text}</p>
           </div>
-        </div>
+        </a>
       ))}
     </div>
   </section>
